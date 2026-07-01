@@ -29,7 +29,9 @@ const LoginPage = () => {
           transition-all duration-300'>
 
         <h1 className='text-center text-[25px] font-semibold text-white mb-10'>Sign In</h1>
-        <form className='flex flex-col gap-3'>
+        <form className='flex flex-col gap-3'
+        onSubmit={(e) => submitHandler(e)}
+        >
 
           
 
@@ -40,7 +42,7 @@ const LoginPage = () => {
             <input
             value={email}
             onChange={(e)=>setEmail(e.target.value)}
-              className='bg-gray-300 text-black placeholder:text-gray-900 px-4 py-1.5 rounded-md text-[18px] focus: outline-none ' type="email" placeholder='Email' />
+              className='bg-gray-300 text-black placeholder:text-gray-900 px-4 py-1.5 rounded-md text-[18px] focus:outline-none ' type="email" placeholder='Email' />
           </div>
 
 
@@ -50,17 +52,16 @@ const LoginPage = () => {
             <input
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
-              className='bg-gray-300 text-black placeholder:text-gray-900 px-4 py-1.5 rounded-md text-[18px] focus: outline-none ' type="password" placeholder='Password' />
+              className='bg-gray-300 text-black placeholder:text-gray-900 px-4 py-1.5 rounded-md text-[18px] focus:outline-none ' type="password" placeholder='Password' />
           </div>
 
 
 
 
           <h3 className='text-center text-gray-300 text-sm'>Don't have an account? <Link to="/signup" className='text-white cursor-pointer'>Signup</Link></h3>
-    
+
 
           <button
-            onClick={(e) => submitHandler(e)}
             type='submit'
             className='bg-white text-lg py-1 rounded-md font-semibold cursor-pointer mt-6 hover:bg-orange-200'>Login</button>
         </form>
