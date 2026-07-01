@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from "../services/axios.js"
+import toast from 'react-hot-toast'
 
 const SignupPage = () => {
+
+  const navigate = useNavigate()
 
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -18,8 +21,16 @@ const SignupPage = () => {
       password,
       confirmPassword
     }
-    const response = await api.post("/auth/register", formData);
-    console.log(response); 
+    try {
+      const response = await api.post("/auth/register", formData);
+      toast.success("Account created successfully")
+      navigate("/login")
+      
+    } catch (error) {
+      console.error(error.response?.data?.message)
+      
+      toast.error(error.response?.data?.message|| "Something is wrong!")
+    } 
   }
 
   return (

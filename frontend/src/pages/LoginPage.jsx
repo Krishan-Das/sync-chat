@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from "../services/axios.js"
+import { useNavigate } from 'react-router-dom'
+import toast from "react-hot-toast"
 
 const LoginPage = () => {
+
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,9 +21,12 @@ const LoginPage = () => {
 
     try {
       const response = await api.post("/auth/login", formData);
-      console.log(response);
+        toast.success("Logged in successfully")
+        navigate("/")
+      
     } catch (error) {
-      console.error(error)
+      console.error(error.response?.data?.message)
+      toast.error(error.response?.data?.message || "Something is wrong!")
     }
   }
 
