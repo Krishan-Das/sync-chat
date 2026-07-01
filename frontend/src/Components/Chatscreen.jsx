@@ -2,7 +2,7 @@ import React from 'react'
 import { IoMdSend } from "react-icons/io";
 import Messagecard from './Messagecard';
 
-const Chatscreen = () => {
+const Chatscreen = ({selectedUser, chats}) => {
   return (
     <div className='w-2/3 h-full flex flex-col border-l-3 border-[#e4e4e48a]'>
       <div className='bg-gray-600 py-2 px-4 border-b-3 border-[#e4e4e48a] flex items-center gap-4'>
@@ -19,8 +19,15 @@ const Chatscreen = () => {
       </div>
 
       <div className="msgContainer flex-1 p-2 flex-col gap-2 flex">
-        <Messagecard/>
-        <Messagecard send={true} />
+        {
+          chats.length > 0 ?
+          chats.map((item)=>{
+            return <Messagecard key={item._id} item={item} />
+          })
+          :
+          <div>No messages yet.</div>
+        }
+        
       </div>
 
       <div className="sendMsg bg-gray-600 py-2 px-4 flex items-center">

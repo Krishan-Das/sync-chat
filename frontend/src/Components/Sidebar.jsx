@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 
-const Sidebar = () => {
+const Sidebar = ({otherUsers, setSelectedUser, selectedUser}) => {
   const navigate = useNavigate()
 
   const logoutHandler = async()=>{
@@ -33,9 +33,14 @@ const Sidebar = () => {
 
       {/* --- friend list --- */}
       <div className="otherUsers flex-1 bg-zinc-400 my-3 rounded-md py-2 px-2 flex flex-col gap-1">
-        <Usercard/>
-        <Usercard/>
-        <Usercard/>
+        {
+          otherUsers.length > 0 ? 
+          otherUsers.map((item)=>{
+            return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
+          })
+          :
+          <div>No Friends Yet.</div>
+        }
       </div>
 
       {/* --- logout btn --- */}
