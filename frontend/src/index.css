@@ -1,1 +1,19 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+
+body{
+  font-family: sans-serif;
+}
+
+
+.BACKGROUND {
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("https://wallpaperaccess.com/full/143736.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
