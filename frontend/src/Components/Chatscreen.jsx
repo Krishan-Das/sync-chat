@@ -1,11 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { IoMdSend } from "react-icons/io";
 import Messagecard from './Messagecard';
 import {OtherUserContext} from "../contexts/OtherUsers.jsx"
+import toast from 'react-hot-toast';
+import api from '../services/axios.js';
 
 const Chatscreen = () => {
 
   const {chats, selectedUser} = useContext(OtherUserContext);
+  const [message, setMessage] = useState('')
+
+  const sendMessageHandler = async()=>{
+    try {
+        const response = await api.post(`/message/send/${selectedUser?._id}`,{message});
+        toast.success(response.data?.message)
+        setMessage("")
+      } catch (error) {
+        console.error(error.response)
+        toast.error(error.response?.data?.message || "Something is wrong!")
+      }
+  }
 
   return (
     <div className='w-2/3 h-full flex flex-col border-l-3 border-[#e4e4e48a]'>
@@ -22,7 +36,7 @@ const Chatscreen = () => {
 
       </div>
 
-      <div className="msgContainer flex-1 p-2 flex-col gap-2 flex relative">
+      <div className="msgContainer flex-1 py-4 px-2 flex-col gap-2 flex relative">
         {
           chats.length > 0 ?
           chats.map((item)=>{
@@ -34,9 +48,15 @@ const Chatscreen = () => {
         
       </div>
 
+        {/* --- send message --- */}
       <div className="sendMsg bg-gray-600 py-2 px-4 flex items-center">
-        <input className='w-full focus:outline-none py-2 text-white' type="text" placeholder='Message'/>
-        <button className='border-2 text-white border-[#efefef68] p-2 rounded-full cursor-pointer'><IoMdSend size={20} /></button>
+        <input 
+        value={message}
+        onChange={(e)=>setMessage(e.target.value)}
+        className='w-full focus:outline-none py-2 text-white' type="text" placeholder='Message'/>
+        <button 
+        onClick={sendMessageHandler}
+        className='border-2 text-white border-[#efefef68] p-2 rounded-full cursor-pointer'><IoMdSend size={20} /></button>
       </div>
     </div>
   )

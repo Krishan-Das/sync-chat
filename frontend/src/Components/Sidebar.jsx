@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { IoSearch } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import Usercard from './Usercard';
@@ -25,6 +25,12 @@ const Sidebar = () => {
       toast.error(error.response?.data?.message || "Something is wrong!")
     }
   }
+
+  useEffect(()=>{
+    if(allOtherUsers.length>0){
+      setSelectedUser(allOtherUsers[0]);
+    }
+  },[allOtherUsers])
 
 
   return (
