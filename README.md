@@ -4,6 +4,13 @@ A full-stack real-time chat application built with the **MERN Stack**. The proje
 
 > **Current Status:** 🚧 Work in Progress
 
+## 📸 Preview
+
+![Portfolio Preview](./screenshots/loginpage_ui.png)
+![Portfolio Preview](./screenshots/homepage_ui.png)
+
+---
+
 ## ✨ Features
 
 ✅ User Authentication (JWT)
