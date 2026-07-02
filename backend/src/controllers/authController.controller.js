@@ -95,7 +95,15 @@ export async function login(req, res) {
       maxAge: 1 * 24 * 60 * 60 * 1000
     }).status(200).json({
       message: "Logged in successfully",
-      success: true
+      success: true,
+      user:{
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        bio: user.bio,
+        profilePicture:user.profilePicture,
+        isOnline: user.isOnline
+      }
     })
 
   } catch (error) {

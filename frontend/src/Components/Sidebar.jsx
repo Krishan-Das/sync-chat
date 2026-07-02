@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { IoSearch } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import Usercard from './Usercard';
 import api from '../services/axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import {OtherUserContext} from "../contexts/OtherUsers.jsx"
+import {AuthContext} from "../contexts/AuthContext.jsx"
 
 
-const Sidebar = ({otherUsers, setSelectedUser, selectedUser}) => {
+const Sidebar = () => {
   const navigate = useNavigate()
+  const { allOtherUsers, selectedUser, setSelectedUser } = useContext(OtherUserContext);
+  const {setUser} = useContext(AuthContext);
 
   const logoutHandler = async()=>{
     try {
       const response = await api.post("/auth/logout");
       toast.success(response.data?.message);
+      setUser(null)
       navigate("/login")
     } catch (error) {
       console.error("Error:", error)
@@ -34,8 +39,8 @@ const Sidebar = ({otherUsers, setSelectedUser, selectedUser}) => {
       {/* --- friend list --- */}
       <div className="otherUsers flex-1 bg-zinc-400 my-3 rounded-md py-2 px-2 flex flex-col gap-1">
         {
-          otherUsers.length > 0 ? 
-          otherUsers.map((item)=>{
+          allOtherUsers.length > 0 ? 
+          allOtherUsers.map((item)=>{
             return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
           })
           :

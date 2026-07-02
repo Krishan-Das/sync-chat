@@ -1,44 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Sidebar from '../Components/Sidebar'
 import Chatscreen from '../Components/Chatscreen'
 import api from '../services/axios'
 
 const Home = () => {
-  const [allOtherUsers, setallOtherUsers] = useState([])
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [chats, setChats] = useState([])
-
-
-  // --- other users ---
-  useEffect(() => {
-    const getAllOtherUsers = async () => {
-      try {
-        const response = await api.get('/auth/all-other-users');
-        setallOtherUsers(response.data?.users);
-      } catch (error) {
-        console.error(error.response?.data?.message)
-        toast.error(error.response?.data?.message || "Something is wrong!")
-      }
-    }
-
-    getAllOtherUsers()
-  }, [])
-
-  // --- selected users conversation ---
-  useEffect(()=>{
-    const getConversation = async()=>{
-      if (!selectedUser) return;
-      try {
-        const response = await api.get(`/message/read/${selectedUser?._id}`);
-        setChats(response.data?.messages);
-      } catch (error) {
-        console.error(error.response?.data?.message)
-        toast.error(error.response?.data?.message || "Something is wrong!")
-      }
-    }
-    getConversation()
-  },[selectedUser])
-
 
   return (
     <div
@@ -53,10 +18,10 @@ const Home = () => {
 
         <div className="con flex w-full h-full">
           {/* --- left bar --- */}
-          <Sidebar otherUsers={allOtherUsers} setSelectedUser={setSelectedUser} selectedUser={selectedUser}/>
+          <Sidebar />
 
           {/* --- right bar --- */}
-          <Chatscreen chats={chats} />
+          <Chatscreen />
         </div>
 
 

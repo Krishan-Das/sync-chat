@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from "../services/axios.js"
 import { useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast"
+import { AuthContext } from '../contexts/AuthContext.jsx'
 
 const LoginPage = () => {
+
+  const {setUser} = useContext(AuthContext);
 
   const navigate = useNavigate()
 
@@ -22,6 +25,8 @@ const LoginPage = () => {
     try {
       const response = await api.post("/auth/login", formData);
         toast.success("Logged in successfully")
+        console.log(response);
+        setUser(response?.data?.user);
         navigate("/")
       
     } catch (error) {
