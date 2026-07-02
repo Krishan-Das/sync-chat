@@ -6,7 +6,30 @@ export const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
+
+
+
+  useEffect(()=>{
+    console.log("Current user:", user);
+  },[user]);
+
+  useEffect(()=>{
+    if(user) return;
+    const getMe = async ()=>{
+      try {
+        const response = await api.get('auth/me');        
+        setUser(response.data?.user);
+      } catch (error) {
+        if (error.response?.status === 401) {
+        setUser(null);
+        return;
+      }
+        toast.error(error.response?.data?.message || "Something is wrong!")
+      }
+    }
+    getMe()
+  }, [])
 
 
   return (

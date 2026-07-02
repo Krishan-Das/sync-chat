@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 import { createContext } from 'react'
 import api from '../services/axios';
 import toast from 'react-hot-toast';
+import {AuthContext} from "../contexts/AuthContext.jsx"
 
 export const OtherUserContext = createContext(null);
 
@@ -9,6 +10,7 @@ const OtherUsersProvider = ({children}) => {
   const [allOtherUsers, setallOtherUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [chats, setChats] = useState([])
+  const {user} = useContext(AuthContext)
   
 
 
@@ -30,6 +32,7 @@ const OtherUsersProvider = ({children}) => {
 
   // --- other users ---
   useEffect(() => {
+    if(!user) return;
     const getAllOtherUsers = async () => {
       try {
         const response = await api.get('/auth/all-other-users');        
@@ -41,7 +44,7 @@ const OtherUsersProvider = ({children}) => {
     }
 
     getAllOtherUsers()
-  }, [])
+  }, [user])
 
   const values = {
     allOtherUsers, setallOtherUsers, selectedUser, setSelectedUser, chats
