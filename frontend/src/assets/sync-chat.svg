@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- ব্যাকগ্রাউন্ড সার্কেল (Modern Gradient) -->
+  <defs>
+    <linearGradient id="syncGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a11cb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2575fc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#syncGradient)" />
+
+  <!-- সিঙ্ক বা কানেকশনের প্রতীক (Sync/Chat Icon) -->
+  <!-- চ্যাট বাবল ১ -->
+  <path d="M70,85 C70,71.2 81.2,60 95,60 C108.8,60 120,71.2 120,85 C120,91.8 117.3,98 112.8,102.5 L115,115 L102.5,112.8 C98,117.3 91.8,120 95,120 C81.2,120 70,108.8 70,85 Z" fill="#ffffff" opacity="0.9" />
+  
+  <!-- চ্যাট বাবল ২ (Syncing Effect) -->
+  <path d="M130,115 C130,103.8 120.8,94.7 109.3,94.7 C97.8,94.7 88.7,103.8 88.7,115 C88.7,120.5 90.9,125.5 94.5,129.2 L92.7,139.3 L102.8,137.5 C106.5,141.1 111.5,143.3 117,143.3 C128.5,143.3 137.7,134.2 137.7,115 Z" fill="#ffffff" opacity="0.6" />
+
+  <!-- মাঝখানে 'S' এবং 'C' অক্ষরের একটি মিনিমাল কম্বিনেশন (Sync-Chat) -->
+  <text x="95" y="103" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="bold" fill="#2575fc" text-anchor="middle">S</text>
+</svg>

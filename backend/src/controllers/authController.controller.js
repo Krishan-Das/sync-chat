@@ -146,7 +146,7 @@ export async function getMe(req, res) {
 export async function allOtherUsers(req, res) {
   try {
     const userId = req.userId;
-    const users = await userModel.find({ _id: { $ne: userId } }).select('fullName bio profilePicture email isOnline');
+    const users = await userModel.find({ _id: { $ne: userId } }).select('fullName bio profilePicture email isOnline createdAt updatedAt');
 
     if (users.length === 0) {
       return res.status(404).json({

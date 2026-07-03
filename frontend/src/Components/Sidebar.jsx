@@ -12,19 +12,7 @@ import {AuthContext} from "../contexts/AuthContext.jsx"
 const Sidebar = () => {
   const navigate = useNavigate()
   const { allOtherUsers, selectedUser, setSelectedUser } = useContext(OtherUserContext);
-  const {setUser} = useContext(AuthContext);
 
-  const logoutHandler = async()=>{
-    try {
-      const response = await api.post("/auth/logout");
-      toast.success(response.data?.message);
-      setUser(null)
-      navigate("/login")
-    } catch (error) {
-      console.error("Error:", error)
-      toast.error(error.response?.data?.message || "Something is wrong!")
-    }
-  }
 
   useEffect(()=>{
     if(allOtherUsers.length>0){
@@ -53,13 +41,6 @@ const Sidebar = () => {
           <div>No Friends Yet.</div>
         }
       </div>
-
-      {/* --- logout btn --- */}
-      <button 
-      onClick={logoutHandler}
-      className="logout bg-[#cecece] text-[16px] font-semibold rounded-md py-1 cursor-pointer hover:bg-red-100 transition ease"
-
-      >Logout</button>
     </div>
   )
 }
