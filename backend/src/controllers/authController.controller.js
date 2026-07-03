@@ -171,6 +171,40 @@ export async function allOtherUsers(req, res) {
   }
 }
 
+// --- searching api ---
+export const searchUser = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    // If search box is empty, return an empty array
+    if (!query?.trim()) {
+      return res.status(200).json({
+        success: true,
+        users: [],
+      });
+    }
+
+    const users = await userModel.find({
+      _id: { $ne: req.userId }, // Exclude logged-in user
+      fullName: {
+        $regex: query,
+        $options: "i", // Case-insensitive
+      },
+    }).select("-password");
+
+    return res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.error("Search Users Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // --- update profile ---
 export async function updateProfile(req, res){
   try {

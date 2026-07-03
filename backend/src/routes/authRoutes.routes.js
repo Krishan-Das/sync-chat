@@ -10,6 +10,7 @@ router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.get("/me", authenticated, authController.getMe);
 router.get("/all-other-users", authenticated, authController.allOtherUsers);
+router.get("/search", authenticated, authController.searchUser);
 router.patch("/profile", authenticated, upload.single("profilePicture"),
   authController.updateProfile
 );

@@ -1,24 +1,45 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoSearch } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import Usercard from './Usercard';
 import api from '../services/axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import {OtherUserContext} from "../contexts/OtherUsers.jsx"
-import {AuthContext} from "../contexts/AuthContext.jsx"
+import { OtherUserContext } from "../contexts/OtherUsers.jsx"
+import { AuthContext } from "../contexts/AuthContext.jsx"
 
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const { allOtherUsers, selectedUser, setSelectedUser } = useContext(OtherUserContext);
+  const [searchInput, setSearchInput] = useState('')
+  const [searchedUsers, setSearchedUsers] = useState([])
 
 
-  useEffect(()=>{
-    if(allOtherUsers.length>0){
+  useEffect(() => {
+    if (allOtherUsers.length > 0) {
       setSelectedUser(allOtherUsers[0]);
     }
-  },[allOtherUsers])
+  }, [allOtherUsers])
+
+
+
+  useEffect(() => {
+    if (!searchInput.trim()) {
+      setSearchedUsers(allOtherUsers)
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const response = await api.get(`/auth/search?query=${searchInput}`)
+        setSearchedUsers(response.data?.users)
+      } catch (error) {
+        console.error(error)
+      }
+    }, 300);
+
+    return () => clearTimeout(timer)
+  }, [searchInput, allOtherUsers])
 
 
   return (
@@ -26,19 +47,30 @@ const Sidebar = () => {
       {/* --- search --- */}
       <div className='flex items-center f-full bg-slate-300 rounded-md'>
         <i className='pl-2'><FaUser /></i>
-        <input className='w-full px-2 py-1.5 focus:outline-none' type="text" placeholder='Search'/>
-        <button className='p-1.5 m-1 cursor-pointer  rounded-full hover:bg-blue-600 hover:text-white  transition ease duration-400'><IoSearch/></button>
+
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className='w-full px-2 py-1.5 focus:outline-none' type="text" placeholder='Search...' />
+
+        <div
+          className='p-1.5 m-1 cursor-pointer  rounded-full hover:bg-[#1e2939] hover:text-white  transition ease duration-400'><IoSearch /></div>
       </div>
 
       {/* --- friend list --- */}
       <div className="otherUsers flex-1 bg-zinc-400 my-3 rounded-md py-2 px-2 flex flex-col gap-1">
         {
-          allOtherUsers.length > 0 ? 
-          allOtherUsers.map((item)=>{
-            return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
-          })
-          :
-          <div>No Friends Yet.</div>
+
+          searchedUsers.length > 0 ?
+            searchedUsers.map((item) => {
+              return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
+            }) :
+            allOtherUsers.length > 0 ?
+              allOtherUsers.map((item) => {
+                return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
+              })
+              :
+              <div>No Friends Yet.</div>
         }
       </div>
     </div>
