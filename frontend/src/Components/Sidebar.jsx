@@ -7,11 +7,12 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { OtherUserContext } from "../contexts/OtherUsers.jsx"
 import { AuthContext } from "../contexts/AuthContext.jsx"
+import Loader from './Loader.jsx';
 
 
 const Sidebar = () => {
   const navigate = useNavigate()
-  const { allOtherUsers, selectedUser, setSelectedUser } = useContext(OtherUserContext);
+  const { allOtherUsers, selectedUser, setSelectedUser, usersLoading } = useContext(OtherUserContext);
   const [searchInput, setSearchInput] = useState('')
   const [searchedUsers, setSearchedUsers] = useState([])
 
@@ -42,6 +43,10 @@ const Sidebar = () => {
   }, [searchInput, allOtherUsers])
 
 
+  // for showing other users 
+  const usersToShow =
+    searchedUsers.length > 0 ? searchedUsers : allOtherUsers;
+
   return (
     <div className='bg-gray-600 w-1/3 h-full p-4 flex flex-col'>
       {/* --- search --- */}
@@ -58,19 +63,22 @@ const Sidebar = () => {
       </div>
 
       {/* --- friend list --- */}
-      <div className="otherUsers flex-1 bg-zinc-400 my-3 rounded-md py-2 px-2 flex flex-col gap-1">
+      <div className="otherUsers flex-1 bg-zinc-400 my-3 rounded-md py-2 px-2 flex flex-col gap-1 relative">
         {
-
-          searchedUsers.length > 0 ?
-            searchedUsers.map((item) => {
-              return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
-            }) :
-            allOtherUsers.length > 0 ?
-              allOtherUsers.map((item) => {
-                return <Usercard key={item._id} user={item} setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
-              })
-              :
-              <div>No Friends Yet.</div>
+          usersLoading ? (
+            <Loader />
+          ) : usersToShow.length > 0 ? (
+            usersToShow.map((item) => (
+              <Usercard
+                key={item._id}
+                user={item}
+                setSelectedUser={setSelectedUser}
+                selectedUser={selectedUser}
+              />
+            ))
+          ) : (
+            <div>No Friends Yet.</div>
+          )
         }
       </div>
     </div>

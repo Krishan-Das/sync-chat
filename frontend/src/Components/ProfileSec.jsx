@@ -5,8 +5,12 @@ import api from "../services/axios";
 import toast from "react-hot-toast";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const ProfileSec = ({ isSetting }) => {
+
+  const [loading, setLoading] = useState(false)
+
   const [isEditing, setIsEditing] = useState(false);
   const { user, setUser } = useContext(AuthContext);
   const [selectedImage, setSelectedImage] = useState(null); // for profile
@@ -41,6 +45,7 @@ const ProfileSec = ({ isSetting }) => {
 
   const handleSave = async () => {
     try {
+      setLoading(true)
       const formData = new FormData();
 
       formData.append("fullName", profile.name);
@@ -65,11 +70,14 @@ const ProfileSec = ({ isSetting }) => {
       toast.error(
         error.response?.data?.message || "Something went wrong."
       );
+    }finally{
+      setLoading(false)
     }
   };
 
   const logoutHandler = async () => {
     try {
+      setLoading(true)
       const response = await api.post("/auth/logout");
       toast.success(response.data?.message);
       setUser(null)
@@ -77,6 +85,8 @@ const ProfileSec = ({ isSetting }) => {
     } catch (error) {
       console.error("Error:", error)
       toast.error(error.response?.data?.message || "Something is wrong!")
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -109,6 +119,13 @@ const ProfileSec = ({ isSetting }) => {
       <div className="h-24 bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900" />
 
       <div className="relative px-6 pb-6">
+
+        {
+          // --- Loading Handle ---
+          loading && <Loader/>
+        }
+
+
         {/* Avatar */}
         <div className="-mt-12 flex justify-center relative">
           <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg ">

@@ -6,21 +6,26 @@ import { OtherUserContext } from "../contexts/OtherUsers.jsx"
 import toast from 'react-hot-toast';
 import api from '../services/axios.js';
 import ProfileSec from './ProfileSec.jsx';
+import Loader from './Loader.jsx';
 
 const Chatscreen = () => {
 
-  const { chats, selectedUser } = useContext(OtherUserContext);
+  const { chats, selectedUser, chatsLoading } = useContext(OtherUserContext);
   const [message, setMessage] = useState('')
   const [isSetting, setIsSetting] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const sendMessageHandler = async () => {
     try {
+      setLoading(true)
       const response = await api.post(`/message/send/${selectedUser?._id}`, { message });
       toast.success(response.data?.message)
       setMessage("")
     } catch (error) {
       console.error(error.response)
       toast.error(error.response?.data?.message || "Something is wrong!")
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -54,15 +59,25 @@ const Chatscreen = () => {
 
       <div className="msgContainer flex-1 py-4 px-2 flex-col gap-2 flex relative">
         {
-          chats.length > 0 ?
+          chatsLoading ? (
+            <Loader/>
+          ):
+          (
+            chats.length > 0 ?
             chats.map((item) => {
               return <Messagecard key={item._id} item={item} />
             })
             :
             <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white'>No messages yet.</div>
+          )
+        }
+        {
+         // --- for msg send loading ---
+          loading && <Loader/>
         }
 
       </div>
+
 
       {/* --- send message --- */}
       <div className="sendMsg bg-gray-600 py-2 px-4 flex items-center">
