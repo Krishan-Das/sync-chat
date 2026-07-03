@@ -9,11 +9,6 @@ const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null);
 
 
-
-  useEffect(()=>{
-    console.log("Current user:", user);
-  },[user]);
-
   useEffect(()=>{
     if(user) return;
     const getMe = async ()=>{

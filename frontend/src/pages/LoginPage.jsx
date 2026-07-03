@@ -25,7 +25,6 @@ const LoginPage = () => {
     try {
       const response = await api.post("/auth/login", formData);
         toast.success("Logged in successfully")
-        console.log(response);
         setUser(response?.data?.user);
         navigate("/")
       

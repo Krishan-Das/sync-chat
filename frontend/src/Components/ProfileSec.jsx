@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileSec = ({ isSetting }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const {user, setUser} = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+  const [selectedImage, setSelectedImage] = useState(null); // for profile
   const navigate = useNavigate()
 
   const [profile, setProfile] = useState({
@@ -28,24 +29,46 @@ const ProfileSec = ({ isSetting }) => {
   const handleImage = (e) => {
     const file = e.target.files[0];
 
-    if (file) {
-      setProfile({
-        ...profile,
-        image: URL.createObjectURL(file),
-      });
+    if (!file) return;
+
+    setSelectedImage(file);
+
+    setProfile((prev) => ({
+      ...prev,
+      image: URL.createObjectURL(file),
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("fullName", profile.name);
+      formData.append("bio", profile.bio);
+
+      if (selectedImage) {
+        formData.append("profilePicture", selectedImage);
+      }
+
+      const response = await api.patch("/auth/profile", formData);
+
+      toast.success(response.data.message);
+
+      setUser(response.data.user);
+
+      setSelectedImage(null);
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error.response?.data?.message || "Something went wrong."
+      );
     }
   };
 
-  const handleSave = () => {
-    // TODO:
-    // Upload image
-    // Call API
-    // Update database
-
-    setIsEditing(false);
-  };
-
-  const logoutHandler = async()=>{
+  const logoutHandler = async () => {
     try {
       const response = await api.post("/auth/logout");
       toast.success(response.data?.message);
@@ -57,18 +80,18 @@ const ProfileSec = ({ isSetting }) => {
     }
   }
 
-  useEffect(()=>{
-    if(!isSetting) setIsEditing(false)
-  },[isSetting])
+  useEffect(() => {
+    if (!isSetting) setIsEditing(false)
+  }, [isSetting])
 
-  useEffect(()=>{
+  useEffect(() => {
     setProfile({
       name: user?.fullName,
       email: user?.email,
       bio: user?.bio || "I am using sync-chat",
       image: user?.profilePicture || syncChat
     })
-  },[user])
+  }, [user])
 
   return (
     <div
@@ -76,10 +99,9 @@ const ProfileSec = ({ isSetting }) => {
         absolute top-15 right-0 w-80 rounded-2xl overflow-hidden
         bg-white shadow-2xl border border-gray-200
         transition-all duration-300 ease-out origin-top-right z-[999]
-        ${
-          isSetting
-            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+        ${isSetting
+          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+          : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
         }
       `}
     >
@@ -144,9 +166,9 @@ const ProfileSec = ({ isSetting }) => {
                 Edit Profile
               </button>
 
-              <button 
-              onClick={logoutHandler}
-              className="flex-1 flex justify-center items-center gap-2 border border-red-500 text-red-500 py-2.5 rounded-xl hover:bg-red-50 transition">
+              <button
+                onClick={logoutHandler}
+                className="flex-1 flex justify-center items-center gap-2 border border-red-500 text-red-500 py-2.5 rounded-xl hover:bg-red-50 transition">
                 <FiLogOut />
                 Logout
               </button>

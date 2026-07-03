@@ -4,7 +4,7 @@ export const uploadImage = async (buffer,originalname, username, folder) => {
   const extension = originalname.split(".").pop();
   const fileName = `profile-${username}-${Date.now()}.${extension}`;
   try {
-    const response = await imagekitClient.upload({
+    const response = await imagekitClient.files.upload({
       file: buffer,
       fileName,
       folder,
@@ -20,7 +20,7 @@ export const deleteImage = async (fileId) => {
   if (!fileId) return;
 
   try {
-    await imagekitClient.deleteFile(fileId);
+    await imagekitClient.files.delete(fileId);
   } catch (error) {
     throw error;
   }
