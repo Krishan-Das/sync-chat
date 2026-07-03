@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs"
 import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken"
+import { uploadImage, deleteImage } from "../services/imagekit.service.js";
 
 
 // --- sign up ---
@@ -102,7 +103,8 @@ export async function login(req, res) {
         email: user.email,
         bio: user.bio,
         profilePicture:user.profilePicture,
-        isOnline: user.isOnline
+        profilePictureFileId: user.profilePictureFileId,
+        lastSeen: user.lastSeen
       }
     })
 
@@ -165,6 +167,66 @@ export async function allOtherUsers(req, res) {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error"
+    });
+  }
+}
+
+// --- update profile ---
+export async function updateProfile(req, res){
+  try {
+    const userId = req.userId;
+
+    const { fullName, bio } = req.body;
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // Update Full Name
+    if (fullName?.trim()) {
+      user.fullName = fullName.trim();
+    }
+
+    // Update Bio
+    if (bio?.trim()) {
+      user.bio = bio.trim();
+    }
+
+    // Update Profile Picture
+    if (req.file) {
+      const response = await uploadImage(
+        req.file.buffer.toString('base64'),
+        req.file.originalname, user._id, 
+        "/sync-chat/profile"
+      )
+
+      // Delete old image (if exists)
+      if (user.profilePictureFileId) {
+        await deleteImage(user.profilePictureFileId);
+      }
+
+      user.profilePicture = response.url;
+      user.profilePictureFileId = response.fileId;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully.",
+      user,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error.",
     });
   }
 }

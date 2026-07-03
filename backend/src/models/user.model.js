@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     type:String,
     default: ""
   },
+  profilePictureFileId:{
+    type: String,
+    default: ""
+  },
   bio:{
     type:String,
     default: ""
