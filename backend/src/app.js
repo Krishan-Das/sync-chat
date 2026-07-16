@@ -12,7 +12,7 @@ const app = express()
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173", // frontend site port
+  origin: process.env.CLIENT_URL, // frontend site port
   credentials: true
 }))
 
