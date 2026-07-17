@@ -10,15 +10,20 @@ import Loader from './Loader.jsx';
 
 const Chatscreen = () => {
 
-  const { chats, selectedUser, chatsLoading } = useContext(OtherUserContext);
+  const { chats, selectedUser, chatsLoading, onlineUsers  } = useContext(OtherUserContext);
   const [message, setMessage] = useState('')
   const [isSetting, setIsSetting] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const isOnline = onlineUsers.includes(selectedUser?._id);
+  console.log(selectedUser);
+  
 
   const sendMessageHandler = async () => {
     try {
       setLoading(true)
       const response = await api.post(`/message/send/${selectedUser?._id}`, { message });
+      
       toast.success(response.data?.message)
       setMessage("")
     } catch (error) {
@@ -40,7 +45,7 @@ const Chatscreen = () => {
 
           <div className="middle flex flex-col ">
             <h2 className="fullName text-[16px] font-semibold py-0 text-white">{selectedUser?.fullName}</h2>
-            <p className='text-[13px] text-[#d7d7d7a6]'>{selectedUser?.lastSeen}</p>
+            <p className='text-[13px] text-[#d7d7d7a6]'>{ isOnline? "online" : selectedUser?.lastSeen }</p>
           </div>
         </div>
 

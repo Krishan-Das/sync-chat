@@ -15,6 +15,7 @@ const OtherUsersProvider = ({ children }) => {
   // --- for loaders ---
   const [usersLoading, setUsersLoading] = useState(false);
   const [chatsLoading, setChatsLoading] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
 
   // --- selected users conversation ---
@@ -56,7 +57,7 @@ const OtherUsersProvider = ({ children }) => {
   }, [user])
 
   const values = {
-    allOtherUsers, setallOtherUsers, selectedUser, setSelectedUser, chats, usersLoading, chatsLoading
+    allOtherUsers, setallOtherUsers, selectedUser, setSelectedUser, chats, usersLoading, chatsLoading, onlineUsers, setOnlineUsers
   }
 
 
