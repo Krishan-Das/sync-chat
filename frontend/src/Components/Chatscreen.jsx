@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import api from '../services/axios.js';
 import ProfileSec from './ProfileSec.jsx';
 import Loader from './Loader.jsx';
+import { formatLastSeen } from '../../../backend/src/utils/formatLastSeen.js';
 
 const Chatscreen = () => {
 
@@ -16,7 +17,6 @@ const Chatscreen = () => {
   const [loading, setLoading] = useState(false);
 
   const isOnline = onlineUsers.includes(selectedUser?._id);
-  console.log(selectedUser);
   
 
   const sendMessageHandler = async () => {
@@ -45,7 +45,7 @@ const Chatscreen = () => {
 
           <div className="middle flex flex-col ">
             <h2 className="fullName text-[16px] font-semibold py-0 text-white">{selectedUser?.fullName}</h2>
-            <p className='text-[13px] text-[#d7d7d7a6]'>{ isOnline? "online" : selectedUser?.lastSeen }</p>
+            <p className='text-[13px] text-[#d7d7d7a6]'>{ isOnline? "online" : formatLastSeen(selectedUser?.lastSeen) }</p>
           </div>
         </div>
 

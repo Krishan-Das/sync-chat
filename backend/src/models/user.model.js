@@ -5,34 +5,35 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true
   },
-  password:{
+  password: {
     type: String,
     required: true
   },
-  profilePicture:{
-    type:String,
-    default: ""
-  },
-  profilePictureFileId:{
+  profilePicture: {
     type: String,
     default: ""
   },
-  bio:{
-    type:String,
+  profilePictureFileId: {
+    type: String,
     default: ""
   },
-  lastSeen:{
+  bio: {
+    type: String,
+    default: ""
+  },
+  lastSeen: {
     type: Date,
+    default: null
   }
-}, 
-{
-  timestamps: true
-})
+},
+  {
+    timestamps: true
+  })
 
 const userModel = mongoose.model("user", userSchema);
 export default userModel;

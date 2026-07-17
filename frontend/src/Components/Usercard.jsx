@@ -5,7 +5,6 @@ import { OtherUserContext } from '../contexts/OtherUsers'
 const Usercard = ({ user, setSelectedUser, selectedUser }) => {
 
   const { onlineUsers } = useContext(OtherUserContext);
-
   const isOnline = onlineUsers.includes(user._id);
 
 
