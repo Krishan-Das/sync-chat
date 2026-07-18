@@ -1,9 +1,9 @@
 import http from "http";
 import express from "express";
 import { Server } from "socket.io";
-import app from "../app.js";
 import userModel from "../models/user.model.js";
 
+const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -12,6 +12,10 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 })
+
+export const getReceiverSocketId = (receiverId) => {
+  return userSocket[receiverId];
+}
 
 let userSocket = {} // { userId: socketId }
 
@@ -25,18 +29,24 @@ io.on('connection', (socket) => {
 
   io.emit('getOnlineUsers', Object.keys(userSocket));
 
-  socket.on('disconnect', async() => {
-    console.log('user disconnected:', socket.id);
-
+  socket.on("disconnect", async () => {
     if (userId) {
       delete userSocket[userId];
-      await userModel.findByIdAndUpdate(userId, {
-        lastSeen: new Date()
-      });
-    }
 
-    io.emit('getOnlineUsers', Object.keys(userSocket));
-  })
+      const lastSeen = new Date();
+
+      await userModel.findByIdAndUpdate(userId, {
+        lastSeen
+      });
+
+      io.emit("userOffline", {
+        userId,
+        lastSeen
+      });
+
+      io.emit("getOnlineUsers", Object.keys(userSocket));
+    }
+  });
 })
 
 export { app, io, server };

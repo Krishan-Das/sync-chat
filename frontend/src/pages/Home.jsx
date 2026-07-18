@@ -7,13 +7,13 @@ const Home = () => {
 
   return (
     <div
-      className=' flex items-center justify-center h-screen flex-col py-15'>
+      className=' flex items-center justify-center h-screen flex-col '>
       {/* --- main container --- */}
       <div
-        className=' min-w-lg rounded-2xl 
+        className='h-screen 
       backdrop-blur-xs bg-white/12 border border-white/35
            shadow-lg shadow-black/20
-           max-w-5xl w-full
+            w-full
           transition-all duration-300 flex-1 overflow-hidden'>
 
         <div className="con flex w-full h-full">

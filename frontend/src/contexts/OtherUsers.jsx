@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
 import api from '../services/axios';
 import toast from 'react-hot-toast';
-import { AuthContext } from "../contexts/AuthContext.jsx"
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 export const OtherUserContext = createContext(null);
 
@@ -10,12 +10,12 @@ const OtherUsersProvider = ({ children }) => {
   const [allOtherUsers, setallOtherUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [chats, setChats] = useState([])
-  const { user } = useContext(AuthContext)
+  const { user, socket } = useContext(AuthContext)
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   // --- for loaders ---
   const [usersLoading, setUsersLoading] = useState(false);
   const [chatsLoading, setChatsLoading] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState([]);
 
 
   // --- selected users conversation ---
@@ -34,7 +34,14 @@ const OtherUsersProvider = ({ children }) => {
       }
     }
     getConversation()
-  }, [selectedUser])
+  }, [selectedUser]);
+
+  // Real time socket
+  useEffect(()=>{
+    socket?.on('newMessage', (msg)=>{
+      setChats([...chats, msg]);
+    })
+  }, [socket, chats])
 
 
   // --- other users ---

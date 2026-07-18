@@ -9,9 +9,9 @@ import { OtherUserContext } from './contexts/OtherUsers'
 
 const App = () => {
 
-  const { user } = useContext(AuthContext);
+  const { user, socket, setSocket } = useContext(AuthContext);
   const { setOnlineUsers } = useContext(OtherUserContext);
-  const [socket, setSocket] = useState(null);
+
 
   useEffect(() => {
     if (!user) return;
@@ -21,17 +21,13 @@ const App = () => {
       }
     });
     if (socket) {
-      console.log("user connected");
       setSocket(socket);
 
       socket.on('getOnlineUsers', (onlineUsers) => {
-        console.log(onlineUsers);
-        
         setOnlineUsers(onlineUsers);
       })
+
     }
-
-
 
     return () => socket.disconnect();
   }, [user]);

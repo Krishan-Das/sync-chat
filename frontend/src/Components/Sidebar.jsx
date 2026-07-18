@@ -8,11 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { OtherUserContext } from "../contexts/OtherUsers.jsx"
 import { AuthContext } from "../contexts/AuthContext.jsx"
 import Loader from './Loader.jsx';
+import { Socket } from 'socket.io-client';
 
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const { allOtherUsers, selectedUser, setSelectedUser, usersLoading } = useContext(OtherUserContext);
+  const { socket } = useContext(AuthContext);
   const [searchInput, setSearchInput] = useState('')
   const [searchedUsers, setSearchedUsers] = useState([])
 
@@ -22,6 +24,28 @@ const Sidebar = () => {
       setSelectedUser(allOtherUsers[0]);
     }
   }, [allOtherUsers])
+
+  // socket
+  useEffect(() => {
+  if (!socket) return;
+
+  const handleUserOffline = ({ userId, lastSeen }) => {
+    setSelectedUser(prev => {
+      if (!prev || prev._id !== userId) return prev;
+
+      return {
+        ...prev,
+        lastSeen,
+      };
+    });
+  };
+
+  socket.on("userOffline", handleUserOffline);
+
+  return () => {
+    socket.off("userOffline", handleUserOffline);
+  };
+}, [socket]);
 
 
 

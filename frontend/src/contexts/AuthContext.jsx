@@ -7,6 +7,7 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({children}) => {
 
   const [user, setUser] = useState(null);
+  const [socket, setSocket] = useState(null);
 
 
   useEffect(()=>{
@@ -28,7 +29,7 @@ const AuthProvider = ({children}) => {
 
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{user, setUser, socket, setSocket}}>
       {children}
     </AuthContext.Provider>
   )
