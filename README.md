@@ -20,11 +20,11 @@ A full-stack real-time chat application built with the **MERN Stack**. The proje
 ✅ One-to-One Chat
 ✅ Conversation-Based Messaging
 ✅ Message Persistence (MongoDB)
+✅ Real-Time Messaging (Socket.IO)
+✅ Online / Offline Status
 
 ## 🚀 Planned Features
 ⏳ Responsive User Interface
-⏳ Real-Time Messaging (Socket.IO)
-⏳ Online / Offline Status
 ⏳ Typing Indicator
 ⏳ Read Receipts
 ⏳ Image & File Sharing
